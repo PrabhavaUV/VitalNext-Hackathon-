@@ -1,0 +1,13 @@
+import { db } from "@/lib/firebase-admin"; // server-side admin SDK
+
+export async function POST(req) {
+  try {
+    const { name, age, ward } = await req.json();
+    const ref = await db.collection("patients").add({
+      name, age, ward, createdAt: new Date()
+    });
+    return Response.json({ id: ref.id });
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
+  }
+}
